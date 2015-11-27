@@ -25,6 +25,6 @@ Package.onTest(function(api) {
   api.use('ecmascript');
   api.use('underscore');
   api.use('tinytest');
-  api.use('vikramthyagarajan:organization-hierarchy');
+  api.use('vikramthyagarajan:meteor-access-control');
   api.addFiles('organization-hierarchy-tests.js');
 });
