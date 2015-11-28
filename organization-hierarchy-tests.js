@@ -22,13 +22,15 @@ describe('Singleton checking', function () {
   });
 });
 describe('Entity Functionality testing', function () {
+  var entityManager;
+  var testEntity = {name: 'Vikram', _id:'2233'};
   beforeAll(function() {
-    var enMgr = new EntityManager();
+    entityManager = new EntityManager();
     var allCollObjs = [{
-      obj: enMgr,
+      obj: entityManager,
       field: 'entities'
     },{
-      obj: enMgr.entityInstanceManager,
+      obj: entityManager.entityInstanceManager,
       field: 'entityInstances'
     }
     ];
@@ -45,7 +47,24 @@ describe('Entity Functionality testing', function () {
   it('should add entity with instance', function () {
     var caps = new EntityManager();
     expect(caps.allEntities.length).toEqual(1);
-    caps.addEntityInstance('User', {name: 'Vikram', _id:'2233'});
+    caps.addEntityInstance('User', testEntity);
     expect(caps.allEntityInstances.length).toEqual(1);
+  });
+  it('should get specific entity instance', function() {
+    var entityInstance = entityManager.getEntityInstance(testEntity._id);
+    expect(entityInstance).toBeDefined();
+  });
+  it('should add all existing entities and objects in the access matrix', function() {
+    var objectLength = entityManager.objectManager.allObjects.length;
+    var entityLength = entityManager.allEntities.length;
+    var entityInstance = entityManager.getEntityInstance(testEntity._id);
+    expect(entityInstance.accessControl).toBeDefined();
+    expect(entityInstance.accessControl.length).toEqual(objectLength + entityLength);
+  });
+  describe('Entity Instance access testing', function() {
+    it('should not allow access by default', function() {
+      var bool = entityManager.canInstancePerform('User', testEntity, 'edit', 'User', testEntity._id);
+      expect(bool).toBeFalsy();
+    });
   });
 });
