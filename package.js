@@ -16,6 +16,8 @@ Package.onUse(function(api) {
   api.use('underscore');
   api.addFiles('lib/CapabilityManager.js');
   api.addFiles('lib/EntityManager.js');
+  api.addFiles('lib/ObjectManager.js');
+  api.addFiles('lib/EntityInstanceManager.js');
   api.export('CapabilityManager', ['client', 'server']);
   api.export('EntityManager', ['client', 'server']);
   api.export('ObjectManager', ['client', 'server']);
@@ -24,7 +26,7 @@ Package.onUse(function(api) {
 Package.onTest(function(api) {
   api.use('ecmascript');
   api.use('underscore');
-  api.use('tinytest');
+  api.use('sanjo:jasmine@0.20.2');
   api.use('vikramthyagarajan:meteor-access-control');
   api.addFiles('organization-hierarchy-tests.js');
 });

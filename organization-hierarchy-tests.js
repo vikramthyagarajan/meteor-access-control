@@ -1,25 +1,51 @@
-Tinytest.addAsync('CapabilityManager must be a Singleton', function (test, next) {
-  var caps = new CapabilityManager();
-  console.log(caps.capabilities.find().fetch());
-  Meteor.setTimeout(function() {
-  	  caps2 = new CapabilityManager();
-      test.equal(caps, caps2);
+var resetCollection = function(collection) {
+  collection.find().fetch().forEach(function(obj) {
+    collection.remove({_id: obj._id});
+  });
+};
+describe('Singleton checking', function () {
+  it('CapabilityManager must be a Singleton', function (next) {
+    var caps = new CapabilityManager();
+    Meteor.setTimeout(function() {
+      caps2 = new CapabilityManager();
+      expect(caps).toBe(caps2);
       next();
-  }, 2000)
-  test.equal(1,1);
-});
-Tinytest.addAsync('EntityManager must be a Singleton', function (test, next) {
-  var caps = new EntityManager();
-  console.log(caps.allEntities);
-  Meteor.setTimeout(function() {
+    }, 2000);
+  });
+  it('EntityManager must be a Singleton', function (next) {
+    var caps = new EntityManager();
+    Meteor.setTimeout(function() {
       caps2 = new EntityManager();
-      test.equal(caps, caps2);
+      expect(caps).toBe(caps2);
       next();
-  }, 2000)
+    }, 2000);
+  });
 });
-// Tinytest.add('should add entity', function (test, next) {
-//   var caps = new EntityManager();
-//   caps.addEntity();
-//   test.equal(1,1);
-//   console.log(caps.entities.find().fetch());
-// });
+describe('Entity Functionality testing', function () {
+  beforeAll(function() {
+    var enMgr = new EntityManager();
+    var allCollObjs = [{
+      obj: enMgr,
+      field: 'entities'
+    },{
+      obj: enMgr.entityInstanceManager,
+      field: 'entityInstances'
+    }
+    ];
+    allCollObjs.forEach(collObj => {
+      console.log('resetting ' + collObj.field);
+      resetCollection(collObj.obj[collObj.field]);
+    });
+  });
+  it('should add entity', function () {
+    var caps = new EntityManager();
+    caps.addEntity('User');
+    expect(caps.allEntities.length).toEqual(1);
+  });
+  it('should add entity with instance', function () {
+    var caps = new EntityManager();
+    expect(caps.allEntities.length).toEqual(1);
+    caps.addEntityInstance('User', {name: 'Vikram', _id:'2233'});
+    expect(caps.allEntityInstances.length).toEqual(1);
+  });
+});
