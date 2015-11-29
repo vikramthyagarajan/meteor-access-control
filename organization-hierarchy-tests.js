@@ -70,19 +70,21 @@ describe('Entity Functionality testing', function () {
       var bool = entityManager.canInstancePerform('User', testEntity, 'edit', 'User', testEntity._id);
       expect(bool).toBeFalsy();
     });
-    // it('should set capability in db', function() {
-    //   //sets capability such that testEntity can edit all users
-    //   entityManager.setCapabilityOfInstance('User', testEntity._id, 'edit', 'User', 'all objects');
-    //   var entity = entityManager.getEntity('User');
-    //   var entityInstance = entityManager.getEntityInstance(testEntity._id);
-    //   var foundEntity = _.findWhere(entityInstance.accessControl, {entity : entity._id});
-    //   var foundRule = _.findWhere(foundEntity.rules, {method: 'edit'});
-    //   var allObjectCapability = entityManager.capabilityManager.getCapability('all objects');
-    //   expect(foundRule.capability).toEqual(allObjectCapability._id);
-    // });
-    // it('should allow access for all objects capability', function() {
-    //   var bool = entityManager.canInstancePerform('User', testEntity, 'edit', 'User', testEntity._id);
-    //   expect(bool).toBeTruthy();
-    // });
+    it('should set capability in db', function() {
+      //sets capability such that testEntity can edit all users
+      entityManager.setCapabilityOfInstance('User', testEntity._id, 'edit', 'entity', 'User', 'all objects');
+      var entity = entityManager.getEntity('User');
+      var entityInstance = entityManager.getEntityInstance(testEntity._id);
+      var foundEntity = _.findWhere(entityInstance.accessControl, {entity : entity._id});
+      var foundRule = foundEntity.rules.edit;
+      var allObjectCapability = entityManager.capabilityManager.getCapability('all objects');
+      console.log(foundRule);
+      console.log(allObjectCapability);
+      expect(foundRule.capability).toEqual(allObjectCapability._id);
+    });
+    it('should allow access for all objects capability', function() {
+      var bool = entityManager.canInstancePerform('User', testEntity, 'edit', 'User', testEntity._id);
+      expect(bool).toBeTruthy();
+    });
   });
 });
