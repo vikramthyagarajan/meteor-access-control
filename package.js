@@ -26,8 +26,14 @@ Package.onUse(function(api) {
 Package.onTest(function(api) {
   api.use('ecmascript');
   api.use('underscore');
+  api.use('autopublish');
   api.use('sanjo:jasmine@0.20.2');
   api.use('vikramthyagarajan:meteor-access-control');
-  api.addFiles('tests/capability-manager-tests.js');
-  api.addFiles('organization-hierarchy-tests.js');
+  api.addFiles('tests/server/capability-unit.js', 'server');
+  api.addFiles('tests/server/entity-unit.js', 'server');
+  api.addFiles('tests/server/database-fixtures.js', 'server');
+  api.addFiles('tests/general/capability-unit.js', ['server', 'client']);
+  api.addFiles('tests/client/database-fixtures.js', 'client');
+  // api.addFiles('tests/server/integration-tests.js', 'server');
+  // api.addFiles('organization-hierarchy-tests.js');
 });

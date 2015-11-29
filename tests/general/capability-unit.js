@@ -8,10 +8,6 @@ describe('CapabilityManager', function() {
 	beforeAll(function() {
 		capabilityManager = new CapabilityManager();
 	});
-	it('should set initial capabilities', function() {
-		var allCaps = capabilityManager.allCapabilities;
-		expect(allCaps.length).toEqual(3);
-	});
 	it('should get default capability', function() {
 		var defCap = capabilityManager.defaultCapability;
 		expect(defCap).toBeDefined();
