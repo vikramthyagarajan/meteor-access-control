@@ -4,22 +4,22 @@ var resetCollection = function(collection) {
   });
 };
 describe('Singleton checking', function () {
-  it('should be a Singleton', function (next) {
-    var caps = new CapabilityManager();
-    Meteor.setTimeout(function() {
-      caps2 = new CapabilityManager();
-      expect(caps).toBe(caps2);
-      next();
-    }, 2000);
-  });
-  it('EntityManager must be a Singleton', function (next) {
-    var caps = new EntityManager();
-    Meteor.setTimeout(function() {
-      caps2 = new EntityManager();
-      expect(caps).toBe(caps2);
-      next();
-    }, 2000);
-  });
+  // it('should be a Singleton', function (next) {
+  //   var caps = new CapabilityManager();
+  //   Meteor.setTimeout(function() {
+  //     caps2 = new CapabilityManager();
+  //     expect(caps).toBe(caps2);
+  //     next();
+  //   }, 2000);
+  // });
+  // it('EntityManager must be a Singleton', function (next) {
+  //   var caps = new EntityManager();
+  //   Meteor.setTimeout(function() {
+  //     caps2 = new EntityManager();
+  //     expect(caps).toBe(caps2);
+  //     next();
+  //   }, 2000);
+  // });
 });
 describe('Entity Functionality testing', function () {
   var entityManager;
@@ -70,19 +70,19 @@ describe('Entity Functionality testing', function () {
       var bool = entityManager.canInstancePerform('User', testEntity, 'edit', 'User', testEntity._id);
       expect(bool).toBeFalsy();
     });
-    it('should set capability in db', function() {
-      //sets capability such that testEntity can edit all users
-      entityManager.setCapabilityOfInstance('User', testEntity._id, 'edit', 'User', 'all objects');
-      var entity = entityManager.getEntity('User');
-      var entityInstance = entityManager.getEntityInstance(testEntity._id);
-      var foundEntity = _.findWhere(entityInstance.accessControl, {entity : entity._id});
-      var foundRule = _.findWhere(foundEntity.rules, {method: 'edit'});
-      var allObjectCapability = entityManager.capabilityManager.getCapability('all objects');
-      expect(foundRule.capability).toEqual(allObjectCapability._id);
-    });
-    it('should allow access for all objects capability', function() {
-      var bool = entityManager.canInstancePerform('User', testEntity, 'edit', 'User', testEntity._id);
-      expect(bool).toBeTruthy();
-    });
+    // it('should set capability in db', function() {
+    //   //sets capability such that testEntity can edit all users
+    //   entityManager.setCapabilityOfInstance('User', testEntity._id, 'edit', 'User', 'all objects');
+    //   var entity = entityManager.getEntity('User');
+    //   var entityInstance = entityManager.getEntityInstance(testEntity._id);
+    //   var foundEntity = _.findWhere(entityInstance.accessControl, {entity : entity._id});
+    //   var foundRule = _.findWhere(foundEntity.rules, {method: 'edit'});
+    //   var allObjectCapability = entityManager.capabilityManager.getCapability('all objects');
+    //   expect(foundRule.capability).toEqual(allObjectCapability._id);
+    // });
+    // it('should allow access for all objects capability', function() {
+    //   var bool = entityManager.canInstancePerform('User', testEntity, 'edit', 'User', testEntity._id);
+    //   expect(bool).toBeTruthy();
+    // });
   });
 });
