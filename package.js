@@ -28,5 +28,6 @@ Package.onTest(function(api) {
   api.use('underscore');
   api.use('sanjo:jasmine@0.20.2');
   api.use('vikramthyagarajan:meteor-access-control');
+  api.addFiles('tests/capability-manager-tests.js');
   api.addFiles('organization-hierarchy-tests.js');
 });
