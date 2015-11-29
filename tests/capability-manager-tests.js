@@ -7,14 +7,6 @@ describe('CapabilityManager', function() {
 	var capabilityManager;
 	beforeAll(function() {
 		capabilityManager = new CapabilityManager();
-    var allCollObjs = [{
-      obj: capabilityManager,
-      field: 'capabilities'
-    }];
-    allCollObjs.forEach(collObj => {
-      console.log('resetting ' + collObj.field);
-      resetCollection(collObj.obj[collObj.field]);
-    });
 	});
 	it('should set initial capabilities', function() {
 		var allCaps = capabilityManager.allCapabilities;
@@ -39,16 +31,18 @@ describe('CapabilityManager', function() {
 		it('should run no objects capability', function() {
 			var capability = capabilityManager.getCapability('no objects');
 			var result = capabilityManager.runCapability(capability, null, null, null);
-			expect(result).toBeTruthy();
+			expect(result).toBeFalsy();
 		});
 		it('should run specific objects capability', function() {
 			var capability = capabilityManager.getCapability('specific objects');
-			var result = capabilityManager.runCapability(capability, null, '1234', {objects: ['1234']});
+			var result = capabilityManager.runCapability(capability, null, '1234', 
+				{objects: [{objId:'1234'}]});
 			expect(result).toBeTruthy();
 		});
 		it('should not run specific objects capability incorrectly', function() {
 			var capability = capabilityManager.getCapability('specific objects');
-			var result = capabilityManager.runCapability(capability, null, '3456', {objects: ['1234']});
+			var result = capabilityManager.runCapability(capability, null, '3456', 
+				{objects: [{objId:'1234'}]});
 			expect(result).toBeFalsy();
 		});
 	});
