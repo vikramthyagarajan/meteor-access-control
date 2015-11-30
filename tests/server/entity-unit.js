@@ -60,13 +60,82 @@ describe('Entity Unit testing', function () {
       var foundEntity = _.findWhere(entityInstance.accessControl, {entity : entity._id});
       var foundRule = foundEntity.rules.edit;
       var allObjectCapability = entityManager.capabilityManager.getCapability('all objects');
-      console.log(foundRule);
-      console.log(allObjectCapability);
       expect(foundRule.capability).toEqual(allObjectCapability._id);
     });
     it('should allow access for all objects capability', function() {
       var bool = entityManager.canInstancePerform('User', testEntity, 'edit', 'User', testEntity._id);
       expect(bool).toBeTruthy();
     });
+    it('should set args with capability in db', function() {
+      var args = {objects:[{objId: testEntity._id}]};
+      var fakeArgs = {objects:[{objId: 'fake_id'}]};
+      entityManager.setCapabilityOfInstance('User', testEntity._id, 'edit', 'entity', 
+        'User', 'specific objects', args);
+      var entity = entityManager.getEntity('User');
+      var entityInstance = entityManager.getEntityInstance(testEntity._id);
+      var foundEntity = _.findWhere(entityInstance.accessControl, {entity : entity._id});
+      var foundRule = foundEntity.rules.edit;
+      var allObjectCapability = entityManager.capabilityManager.getCapability('specific objects');
+      expect(foundRule.capability).toEqual(allObjectCapability._id);
+      expect(foundRule.args).toEqual(args);
+    });
+    it('should succeed for correct args', function() {
+      var bool = entityManager.canInstancePerform('User', testEntity, 'edit', 
+        'User', testEntity._id);
+      expect(bool).toBeTruthy();
+    });
+    it('should change args', function() {
+      entityManager.setCapabilityArgsOfInstance('User', testEntity._id, 'edit', 'entity',
+        'User', fakeArgs);
+      var entity = entityManager.getEntity('User');
+      var entityInstance = entityManager.getEntityInstance(testEntity._id);
+      var foundEntity = _.findWhere(entityInstance.accessControl, {entity : entity._id});
+      var foundRule = foundEntity.rules.edit;
+      expect(foundRule.args).toEqual(fakeArgs);
+    });
+    it('should fail for incorrect args', function() {
+      var bool = entityManager.canInstancePerform('User', testEntity, 'edit', 
+        'User', testEntity._id);
+      expect(bool).toBeFalsy();
+    });
+  });
+});
+describe('Entity Unit testing by collection', function() {
+  var entityColl;
+  beforeAll(function() {
+    entityColl = new Meteor.Collection(null);
+    entityManager = new EntityManager();
+    var allCollObjs = [{
+      obj: entityManager,
+      field: 'entities'
+    },{
+      obj: entityManager.entityInstanceManager,
+      field: 'entityInstances'
+    }
+    ];
+    allCollObjs.forEach(collObj => {
+      console.log('resetting ' + collObj.field);
+      resetCollection(collObj.obj[collObj.field]);
+    });
+  });
+  it('should add entity', function () {
+    var caps = new EntityManager();
+    caps.addEntity('Tester', entityColl);
+    expect(caps.allEntities.length).toEqual(1);
+  });
+  it('should get specific entity', function () {
+    var entityObj = entityManager.getEntity('Tester');
+    expect(entityObj).toBeDefined();
+  });
+  it('should add entity instance from DB', function () {
+    var caps = new EntityManager();
+    expect(caps.allEntities.length).toEqual(1);
+    entityColl.insert({name: 'Tester1'});
+    expect(caps.allEntityInstances.length).toEqual(1);
+  });
+  it('should get specific entity instance', function() {
+    var entityId = entityColl.findOne({name: 'Tester1'});
+    var entityInstance = entityManager.getEntityInstance(entityId);
+    expect(entityInstance).toBeDefined();
   });
 });
