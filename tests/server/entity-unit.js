@@ -48,6 +48,8 @@ describe('Entity Unit testing', function () {
     expect(entityInstance.accessControl.length).toEqual(objectLength + entityLength);
   });
   describe('Entity Instance access testing', function() {
+    var args = {objects:[{objId: testEntity._id}]};
+    var fakeArgs = {objects:[{objId: 'fake_id'}]};
     it('should not allow access by default', function() {
       var bool = entityManager.canInstancePerform('User', testEntity, 'edit', 'User', testEntity._id);
       expect(bool).toBeFalsy();
@@ -67,8 +69,6 @@ describe('Entity Unit testing', function () {
       expect(bool).toBeTruthy();
     });
     it('should set args with capability in db', function() {
-      var args = {objects:[{objId: testEntity._id}]};
-      var fakeArgs = {objects:[{objId: 'fake_id'}]};
       entityManager.setCapabilityOfInstance('User', testEntity._id, 'edit', 'entity', 
         'User', 'specific objects', args);
       var entity = entityManager.getEntity('User');
@@ -80,13 +80,13 @@ describe('Entity Unit testing', function () {
       expect(foundRule.args).toEqual(args);
     });
     it('should succeed for correct args', function() {
-      var bool = entityManager.canInstancePerform('User', testEntity, 'edit', 
+      var bool = entityManager.canInstancePerform('User', testEntity, 'edit', 'entity',
         'User', testEntity._id);
       expect(bool).toBeTruthy();
     });
     it('should change args', function() {
-      entityManager.setCapabilityArgsOfInstance('User', testEntity._id, 'edit', 'entity',
-        'User', fakeArgs);
+      entityManager.setCapabilityOfInstance('User', testEntity._id, 'edit', 'entity',
+        'User', null, fakeArgs);
       var entity = entityManager.getEntity('User');
       var entityInstance = entityManager.getEntityInstance(testEntity._id);
       var foundEntity = _.findWhere(entityInstance.accessControl, {entity : entity._id});
@@ -118,24 +118,30 @@ describe('Entity Unit testing by collection', function() {
       resetCollection(collObj.obj[collObj.field]);
     });
   });
-  it('should add entity', function () {
+  it('should add entity and store all its instances', function () {
+    entityColl.insert({name: 'Tester1'});
+    entityColl.insert({name: 'Tester2'});
+    entityColl.insert({name: 'Tester3'});
+    entityColl.insert({name: 'Tester4'});
+    entityColl.insert({name: 'Tester5'});
     var caps = new EntityManager();
     caps.addEntity('Tester', entityColl);
     expect(caps.allEntities.length).toEqual(1);
+    expect(caps.allEntityInstances.length).toEqual(5);
   });
-  it('should get specific entity', function () {
+  it('should get specific entity again', function () {
     var entityObj = entityManager.getEntity('Tester');
     expect(entityObj).toBeDefined();
   });
   it('should add entity instance from DB', function () {
     var caps = new EntityManager();
     expect(caps.allEntities.length).toEqual(1);
-    entityColl.insert({name: 'Tester1'});
-    expect(caps.allEntityInstances.length).toEqual(1);
+    entityColl.insert({name: 'Tester6'});
+    expect(caps.allEntityInstances.length).toEqual(6);
   });
-  it('should get specific entity instance', function() {
-    var entityId = entityColl.findOne({name: 'Tester1'});
-    var entityInstance = entityManager.getEntityInstance(entityId);
+  it('should get specific entity instance again', function() {
+    var entityObj = entityColl.findOne({name: 'Tester1'});
+    var entityInstance = entityManager.getEntityInstance(entityObj._id);
     expect(entityInstance).toBeDefined();
   });
 });
