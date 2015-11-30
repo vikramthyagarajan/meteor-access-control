@@ -18,6 +18,7 @@ Package.onUse(function(api) {
   api.addFiles('lib/EntityManager.js');
   api.addFiles('lib/ObjectManager.js');
   api.addFiles('lib/EntityInstanceManager.js');
+  api.addFiles('lib/AccessControlEngine.js');
   api.export('CapabilityManager', ['client', 'server']);
   api.export('EntityManager', ['client', 'server']);
   api.export('ObjectManager', ['client', 'server']);
