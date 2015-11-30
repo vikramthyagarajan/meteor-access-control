@@ -51,10 +51,11 @@ describe('Entity Unit testing', function () {
     var args = {objects:[{objId: testEntity._id}]};
     var fakeArgs = {objects:[{objId: 'fake_id'}]};
     it('should not allow access by default', function() {
-      var bool = entityManager.canInstancePerform('User', testEntity, 'edit', 'User', testEntity._id);
+      var bool = entityManager.canInstancePerform('User', testEntity, 'edit', 'entity',
+        'User', testEntity._id);
       expect(bool).toBeFalsy();
     });
-    it('should set capability in db', function() {
+    it('should set capability of entity in db', function() {
       //sets capability such that testEntity can edit all users
       entityManager.setCapabilityOfInstance('User', testEntity._id, 'edit', 'entity', 'User', 'all objects');
       var entity = entityManager.getEntity('User');
@@ -65,7 +66,8 @@ describe('Entity Unit testing', function () {
       expect(foundRule.capability).toEqual(allObjectCapability._id);
     });
     it('should allow access for all objects capability', function() {
-      var bool = entityManager.canInstancePerform('User', testEntity, 'edit', 'User', testEntity._id);
+      var bool = entityManager.canInstancePerform('User', testEntity, 'edit', 'entity',
+        'User', testEntity._id);
       expect(bool).toBeTruthy();
     });
     it('should set args with capability in db', function() {
@@ -94,7 +96,7 @@ describe('Entity Unit testing', function () {
       expect(foundRule.args).toEqual(fakeArgs);
     });
     it('should fail for incorrect args', function() {
-      var bool = entityManager.canInstancePerform('User', testEntity, 'edit', 
+      var bool = entityManager.canInstancePerform('User', testEntity, 'edit', 'entity',
         'User', testEntity._id);
       expect(bool).toBeFalsy();
     });

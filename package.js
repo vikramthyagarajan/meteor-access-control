@@ -31,6 +31,7 @@ Package.onTest(function(api) {
   api.use('vikramthyagarajan:meteor-access-control');
   api.addFiles('tests/server/capability-unit.js', 'server');
   api.addFiles('tests/server/entity-unit.js', 'server');
+  api.addFiles('tests/server/object-unit.js', 'server');
   api.addFiles('tests/server/database-fixtures.js', 'server');
   api.addFiles('tests/general/capability-unit.js', ['server', 'client']);
   api.addFiles('tests/client/database-fixtures.js', 'client');
