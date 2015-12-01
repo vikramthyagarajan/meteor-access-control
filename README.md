@@ -58,8 +58,8 @@ There are 3 types of elements in the system-
 
 6) Get the rules whenever required using the 'can' method
 ```js
-	var boolAdmin = AccessControlEngine.can('Role', adminRole, 'view', 'object', 'Gallery', gallery1);
-	if(bool) {
+	var canView = AccessControlEngine.can('Role', adminRole, 'view', 'object', 'Gallery', gallery1);
+	if(canView) {
 		//show gallery 1
 	}
 ```
