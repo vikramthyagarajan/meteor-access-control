@@ -1,8 +1,7 @@
 #Meteor-Access-Control
 A meteor package which provides flexible, hierarchical and extensible access control
 
-Source: https://github.com/vikramthyagarajan/meteor-access-control
-Package on Atmosphere: //Link coming soon
+Package on Atmosphere: https://atmospherejs.com/vikramthyagarajan/meteor-access-control
 
 There are 3 types of elements in the system- 
 - Entities: These are real world elements that exist in the system. Entities hold power and control over other entities and objects. Examples are Branch, Roles, Users etc.

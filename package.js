@@ -14,6 +14,7 @@ Package.onUse(function(api) {
   api.versionsFrom('1.2.1');
   api.use('ecmascript');
   api.use('underscore');
+  api.use('autopublish');
   api.addFiles('lib/CapabilityManager.js');
   api.addFiles('lib/EntityManager.js');
   api.addFiles('lib/ObjectManager.js');
