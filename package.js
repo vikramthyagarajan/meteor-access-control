@@ -1,6 +1,6 @@
 Package.describe({
   name: 'vikramthyagarajan:meteor-access-control',
-  version: '0.0.2',
+  version: '0.0.3',
   // Brief, one-line summary of the package.
   summary: 'A meteor package which provides flexible, hierarchical and extensible access control',
   // URL to the Git repository containing the source code for this package.
@@ -14,7 +14,6 @@ Package.onUse(function(api) {
   api.versionsFrom('1.2.1');
   api.use('ecmascript@0.1.5');
   api.use('underscore');
-  api.use('autopublish');
   api.addFiles('lib/CapabilityManager.js');
   api.addFiles('lib/EntityManager.js');
   api.addFiles('lib/ObjectManager.js');
@@ -23,6 +22,7 @@ Package.onUse(function(api) {
   api.export('CapabilityManager', ['client', 'server']);
   api.export('EntityManager', ['client', 'server']);
   api.export('ObjectManager', ['client', 'server']);
+  api.export('AccessControlEngine', ['client', 'server']);
 });
 
 Package.onTest(function(api) {
